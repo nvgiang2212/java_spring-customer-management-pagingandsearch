@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Customers</title>
+</head>
+<style>
+    #search input {
+        border-radius: 10px;
+    }
+    footer {
+        text-align: right;
+    }
+    #customers {
+        font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+        width: 100%;
+        border-collapse: collapse;
+    }
+    #customers td, #customers th {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+    #customers tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+    #customers tr:hover {
+        background-color: #1ddd10;
+    }
+    #customers th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: #0217af;
+        color: white;
+    }
+    button {
+        width: 150px;
+        background-color: #4CAF50;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        text-align: center;
+    }
+    button:hover {
+        background-color: darkorange;
+    }
+</style>
+<body>
+<a href="/create-customer">
+    <button>New customer</button>
+</a>
+<a href="/provinces">
+    <button>List Province</button>
+</a>
+<h1>Customers</h1>
+<form id="search">
+    <input name="s" type="text"/>
+    <input type="submit" value="Search"/>
+</form><br/>
+<table id="customers">
+    <tr>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Province</th>
+        <th style="text-align: center">Edit</th>
+        <th style="text-align: center">Delete</th>
+    </tr>
+    <th:block th:each="customer : ${customers}">
+        <tr>
+            <td th:text="${customer.firstName}"></td>
+            <td th:text="${customer.lastName}"></td>
+            <td th:text="${customer.province.name}"></td>
+            <td style="text-align: center"><a th:href="@{/edit-customer/__${customer.id}__ }">Edit</a></td>
+            <td style="text-align: center"><a th:href="@{/delete-customer/__${customer.id}__ }">Delete</a></td>
+        </tr>
+    </th:block>
+</table>
+<div>
+    <a th:href="@{'/?size=10'(page=${customers.number - 1})}" th:if="${customers.hasPrevious()}">Previous</a>
+    <span th:text="${customers.number + 1}"></span>/<span th:text="${customers.totalPages}"></span>
+    <a th:href="@{'/?size=10'(page=${customers.number + 1})}" th:if="${customers.hasNext()}">Next</a>
+</div>
+<footer> &copy; 2019 Adam Store</footer>
+</body>
+</html>
